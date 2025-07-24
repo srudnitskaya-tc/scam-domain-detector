@@ -1,22 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Scam Domain Detector
+
+A Next.js TypeScript application that helps prevent fraudulent domain registrations by checking domain availability and detecting suspicious patterns that may impersonate legitimate companies.
+
+## Features
+
+- **Domain Availability Check**: Verify if domains are already registered
+- **TLD Validation**: Filter by Tucows-offered TLDs
+- **Fraud Detection**: Compare against database of legitimate businesses including:
+  - Fortune 500 companies
+  - Major tech companies
+  - Banks and financial institutions
+  - Cryptocurrency exchanges
+  - Trading platforms
+  - Retail stores
+  - Airlines and streaming services
+- **Pattern Matching**: Detect typosquatting, homograph attacks, and suspicious domain variations
+- **Binary Response System**: Clear YES/NO recommendation for domain registration eligibility
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 with TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: SQLite with Prisma ORM
+- **API**: Next.js API routes
+- **Icons**: Lucide React
+- **Validation**: Zod
 
 ## Getting Started
 
-First, run the development server:
-
+1. **Install dependencies**:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Set up the database**:
+```bash
+npm run db:seed
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Run the development server**:
+```bash
+npm run dev
+```
+
+4. **Open [http://localhost:3000](http://localhost:3000)** with your browser to see the application.
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run db:seed` - Seed database with legitimate companies
+- `npm run db:studio` - Open Prisma Studio
+
+## How It Works
+
+1. **Input**: User enters a domain name (e.g., "gooogle.com")
+2. **TLD Check**: Validates if the TLD is supported by Tucows
+3. **Availability Check**: Simulates checking if domain is already registered
+4. **Fraud Detection**: Analyzes domain against database of legitimate companies using:
+   - Exact domain matching with different TLDs
+   - Typosquatting detection (character substitutions, additions)
+   - Homograph attack detection (look-alike characters)
+   - Levenshtein distance for similarity matching
+5. **Result**: Returns YES (safe to register) or NO (potential fraud detected)
+
+## Database Schema
+
+- **LegitimateCompany**: Stores company names, domains, and categories
+- **TucowsTLD**: Available TLDs with pricing information
+- **DomainCheck**: Logs all domain checks for analysis
+
+## Example Fraud Detection
+
+The system detects various fraud patterns:
+- `gooogle.com` → Flagged as similar to Google's domain
+- `paypaI.com` → Flagged for homograph attack (capital I instead of lowercase l)
+- `facebook-login.com` → Flagged for adding suspicious terms to legitimate brand
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

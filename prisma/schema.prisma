@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LegitimateCompany {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  domains     String   // JSON string of domains array
+  category    String   // e.g., "fortune500", "crypto", "bank", "trading", "retail"
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("legitimate_companies")
+}
+
+model TucowsTLD {
+  id        Int      @id @default(autoincrement())
+  tld       String   @unique
+  price     Float?
+  available Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("tucows_tlds")
+}
+
+model DomainCheck {
+  id            Int      @id @default(autoincrement())
+  domain        String
+  isAvailable   Boolean
+  isFraudulent  Boolean
+  reason        String?
+  checkedAt     DateTime @default(now())
+
+  @@map("domain_checks")
+}
